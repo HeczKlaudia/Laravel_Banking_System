@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Crypt;
+//use Illuminate\Support\Facades\Crypt;
+//use ESolution\DBEncryption\Traits\EncryptedAttribute;
 
 class Szamlak extends Model
 {
-    use HasFactory;
+    use HasFactory/* , EncryptedAttribute */;
+
 
     protected $table = 'accounts';
 
@@ -22,6 +24,14 @@ class Szamlak extends Model
         'user_id',
         'bank_id'
     ];
+
+/*     protected $encryptable = [
+
+        'szamlaszam', 'egyenleg', 'hitelkeret', 'iban'
+
+    ]; */
+
+
     /* 
     protected $hidden = [
         'szamlaszam',
@@ -37,7 +47,7 @@ class Szamlak extends Model
         'iban' => 'encrypted',
     ]; */
 
-/*     public function setSzamlaszamAttr($value)
+    /*     public function setSzamlaszamAttr($value)
     {
         $this->attributes['szamlaszam'] = Crypt::encryptString($value);
     }

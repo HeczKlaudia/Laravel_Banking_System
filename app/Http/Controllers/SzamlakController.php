@@ -4,10 +4,56 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Szamlak;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
+
+/* trait Encryptable
+{
+    public function getEncryptable()
+    {
+        return $this->encryptable;
+    }
+
+    public function getAttribute($key)
+    {
+        $value = parent::getAttributeValue($key);
+
+        if (in_array($key, $this->encryptable)) {
+        //    dd(parent::getAttributeValue($key));
+            return $value = Crypt::decrypt($value);
+        }
+        return $value;
+    }
+
+    public function setAttribute($key, $value)
+    {
+        if (in_array($key, $this->encryptable)) {
+            $value = Crypt::encrypt($value);
+        }
+
+        return parent::setAttribute($key, $value);
+    }
+}
+
+class ModelDecrypter
+{
+    public function decryptModel(Model $model)
+    {
+        foreach ($model->getEncryptable() as $attribute) {
+            $model->setAttribute($attribute, decrypt($model->getAttribute($attribute)));
+        }
+
+        return $model;
+    }
+
+    public function decryptCollection(Collection $collection)
+    {
+        return $collection->map(function (Model $model) {
+         //   dd($model);
+            return $this->decryptModel($model);
+        });
+    }
+} */
 
 class SzamlakController extends Controller
 {
@@ -16,11 +62,13 @@ class SzamlakController extends Controller
     {
         $user_id = Auth::user()->id;
 
-        $szamlak = DB::table('accounts')
+            $szamlak = DB::table('accounts')
             ->select('accounts.*')
             ->leftJoin('users', 'users.id', '=', 'accounts.user_id')
             ->where('users.id', $user_id)
             ->get();
+            
+    //    $szamlak = (new ModelDecrypter)->decryptCollection($szamlak);
 
         return view('dashboard', compact('szamlak'));
     }
